@@ -881,8 +881,8 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
-    // Before the hub's language is read: without a hub id the data service looks the hub up by
-    // search, which can answer with any site, and a new site may not have its hub yet.
+    // Before the hub's language is read: a new site may not have its hub yet, and has no hub
+    // to compare its language with.
     if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
     if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     const hubLanguage = await this._getHubLanguage()

@@ -1,4 +1,4 @@
-import { IResolveHubUrlParams, resolveHubUrl } from './resolveHubUrl'
+import { hasHubId, IResolveHubUrlParams, resolveHubUrl } from './resolveHubUrl'
 
 const WEB = 'https://contoso.sharepoint.com/sites/prosjekt'
 const HUB = 'https://contoso.sharepoint.com/sites/portefolje'
@@ -85,5 +85,32 @@ describe('resolveHubUrl', () => {
   it('reads hub data given as an object too', async () => {
     const { value } = params({ hubSiteData: response({ value: { url: HUB } }) })
     expect(await resolveHubUrl(value)).toBe(HUB)
+  })
+
+  it('asks neither HubSites/GetById nor search without a hub id, which search answers with any address', async () => {
+    const { value, requests } = params(
+      {
+        search: 'https://contoso.sharepoint.com/sites/annet/Lists/Prosjekter/DispForm.aspx?ID=193'
+      },
+      { hubSiteId: '' }
+    )
+    await expect(resolveHubUrl(value)).rejects.toThrow('No hub URL found')
+    expect(requests).toEqual(['hubSiteData'])
+  })
+})
+
+describe('hasHubId', () => {
+  it.each([
+    [''],
+    [undefined],
+    [null],
+    ['00000000-0000-0000-0000-000000000000'],
+    ['{00000000-0000-0000-0000-000000000000}']
+  ])('takes %p for no hub', (hubSiteId) => {
+    expect(hasHubId(hubSiteId)).toBe(false)
+  })
+
+  it('takes the id of a hub for one', () => {
+    expect(hasHubId(HUB_ID)).toBe(true)
   })
 })

@@ -83,9 +83,19 @@ async function fromHubSitesById({ webUrl, hubSiteId, fetch }: IResolveHubUrlPara
 }
 
 /**
+ * Whether the hub id a page gives names a hub. A site without a hub has no id, or the empty GUID.
+ *
+ * @param hubSiteId `legacyPageContext.hubSiteId`
+ */
+export function hasHubId(hubSiteId?: string): boolean {
+  return !!hubSiteId && hubSiteId.replace(/[{}0-]/g, '') !== ''
+}
+
+/**
  * Finds the URL of the hub the current site is associated with. A site that is not itself the
  * hub reads its own hub data first, so a user with access to some of the hub's lists only (the
- * group «Minimum lesetilganger på hub») finds the hub too. Then `HubSites/GetById`, then search.
+ * group «Minimum lesetilganger på hub») finds the hub too. Then `HubSites/GetById`, then search,
+ * both only with a hub id to look for.
  *
  * @returns The hub's absolute URL
  *
@@ -96,10 +106,14 @@ export async function resolveHubUrl(params: IResolveHubUrlParams): Promise<strin
   if (!params.isHubSite) {
     lookups.push({ name: 'HubSiteData', lookup: () => fromHubSiteData(params) })
   }
-  lookups.push(
-    { name: 'HubSites/GetById', lookup: () => fromHubSitesById(params) },
-    { name: 'search', lookup: () => params.search(params.hubSiteId) }
-  )
+  // Search answers an empty `SiteId:` with any address, the form of a list item for one, which
+  // was then stored as the hub of every site without one.
+  if (hasHubId(params.hubSiteId)) {
+    lookups.push(
+      { name: 'HubSites/GetById', lookup: () => fromHubSitesById(params) },
+      { name: 'search', lookup: () => params.search(params.hubSiteId) }
+    )
+  }
   for (const { name, lookup } of lookups) {
     try {
       const url = await lookup()
