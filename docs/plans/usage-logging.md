@@ -11,6 +11,10 @@ rename). The old `feat/logging` branch there holds only this plan, on the pre-sq
 prosjektportalen-assist the branch is `feat/logging` off `main`. The user does all git. Target:
 1.15.0 (the changelog dates it 19.11.2026), verified on the test channel before the release (D5).
 
+A level 4 (diagnostics: an opt-in switch that sends error text) is planned in
+`docs/plans/usage-logging-level-4.md`, proposed on 2026-11-25 and gone through with the user on
+2026-11-27. Nothing in this plan changes until that plan is built.
+
 Puzzlepart cannot see what customers use Prosjektportalen for. Assist knows when a hub was
 installed or upgraded (the pingback), which template packages were installed (the catalog) and how
 PP Assistenten is used. It knows nothing about the web parts, extensions and features people use
