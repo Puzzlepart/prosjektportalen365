@@ -7,5 +7,5 @@ export interface ISPContentType {
   StringId: string
   Name: string
   Fields: ISPField[]
-  FieldLinks?: { Name: string; Required: boolean }[]
+  FieldLinks?: { Name: string; Required: boolean; Hidden?: boolean }[]
 }

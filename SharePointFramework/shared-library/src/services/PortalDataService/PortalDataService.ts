@@ -54,7 +54,12 @@ import {
   isBuiltOnContentType,
   isListContentTypeOf
 } from '../ShieldedProjectService/contentTypeLineage'
-import { getProjectPropertiesListSettings } from './projectPropertiesList'
+import {
+  getSiteColumnSchema,
+  IListFieldSchema,
+  isHiddenByContentType
+} from '../ShieldedProjectService/listFields'
+import { findSiteColumn, getProjectPropertiesListSettings } from './projectPropertiesList'
 import { resolveHubUrl } from './resolveHubUrl'
 import {
   GetStatusReportsOptions,
@@ -80,6 +85,9 @@ import { countFlagged, readItemCount, readNewestInstallation, readSiteFlags } fr
 export interface IItemUpdateResultData {
   etag: string
 }
+
+/** A site column of the hub, as much of it as it takes to make a project site the same one. */
+type HubSiteColumn = Pick<IListFieldSchema, 'InternalName' | 'SchemaXml'>
 
 /** What the hub answered `_probeHubAccess`. */
 interface IHubAccessProbe {
@@ -869,10 +877,17 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
   /**
    * Sync list with project properties from hub site.
    *
-   * Skips fields that has `ShowInEditForm` set to `FALSE`
+   * A field the list lacks is added from the project site's site column of that name, unless that
+   * one is hidden from the edit form; any other field is made on the list from the hub's schema.
+   * For a shielded project every field comes from a site column, made first from the hub's site
+   * column where the site lacks it (`fromSiteColumns`): search gives the portfolio the values of
+   * such a field only. A field the hub's content type hides in its forms is the exception. It
+   * stays a column of the list's own, hidden as the content type has it, as for any project: the
+   * site column is the status report list's too, where a report fills the field in.
    */
   public async syncList(params: SyncListParams): Promise<ISyncListReturnType> {
     const fieldsAdded: SPField[] = []
+    const fromSiteColumns = params.fromSiteColumns ?? this.isShieldedProject
     const web = spfi(params.url).using(AssignFrom(this._sp.web)).web
     const { jsomContext } = await initJsom(params.url, { loadTaxonomy: true })
     const { enableContentTypes, settings } = getProjectPropertiesListSettings(
@@ -885,15 +900,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
     ])
     const listFields = await this.getListFields(params.listName, undefined, web)
     const spList = jsomContext.web.get_lists().getByTitle(params.listName)
+    // Read when the first field is to come from a site column, and not at all for a list in sync.
+    let hubSiteColumns: Promise<HubSiteColumn[]>
+    const getHubSiteColumns = () => {
+      if (!hubSiteColumns) hubSiteColumns = this._getHubSiteColumns()
+      return hubSiteColumns
+    }
     for (const field of hubContentType.Fields) {
-      const [[listField], [siteField]] = [
-        listFields.filter((fld) => fld.InternalName === field.InternalName),
-        targetSiteFields.filter(
-          (fld) =>
-            fld.InternalName === field.InternalName &&
-            fld.SchemaXml.indexOf('ShowInEditForm="FALSE"') === -1
-        )
-      ]
+      const [listField] = listFields.filter((fld) => fld.InternalName === field.InternalName)
       if (listField) {
         Logger.log({
           message: `(PortalDataService) (syncList) Field [${field.InternalName}] already exists on list [${params.listName}].`,
@@ -910,6 +924,14 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
         if (params.progressFunc) {
           params.progressFunc(format(strings.SyncListAddingField, field.Title))
         }
+        const keepsOwnColumn =
+          fromSiteColumns && isHiddenByContentType(field, await getHubSiteColumns())
+        const siteField = keepsOwnColumn
+          ? undefined
+          : (findSiteColumn(targetSiteFields, field.InternalName, fromSiteColumns) ??
+            (fromSiteColumns
+              ? await this._createSiteColumn(web, field, await getHubSiteColumns())
+              : undefined))
         if (siteField) {
           const fldToAdd = jsomContext.web
             .get_fields()
@@ -953,6 +975,54 @@ export class PortalDataService extends DataService<IPortalDataServiceConfigurati
       await ensureList.list.items.add(params.properties)
     }
     return { ...ensureList, fieldsAdded }
+  }
+
+  /**
+   * Makes a hub field a site column on the project site, from the hub's site column of that name:
+   * the field's own schema is what the content type says of it. Where that fails, the sync goes
+   * on and makes the field on the list instead, as for a project that is not shielded.
+   *
+   * @param web The project site
+   * @param field The field, as the hub's content type has it
+   * @param hubSiteColumns The hub's site columns
+   *
+   * @returns The field, or nothing when the site column could not be made
+   */
+  private async _createSiteColumn<T extends { InternalName: string; SchemaXml: string }>(
+    web: IWeb,
+    field: T,
+    hubSiteColumns: HubSiteColumn[]
+  ): Promise<T | undefined> {
+    try {
+      await web.fields.createFieldAsXml(
+        transformFieldXml(getSiteColumnSchema(field, hubSiteColumns))
+      )
+      return field
+    } catch (error) {
+      Logger.log({
+        message: `(PortalDataService) (syncList) Could not make [${field.InternalName}] a site column on the project site, so the list gets a column of its own, whose values search does not give the portfolio.`,
+        data: error,
+        level: LogLevel.Warning
+      })
+      return undefined
+    }
+  }
+
+  /**
+   * The hub's site columns, for a site column of the project site to be made from. Where they
+   * cannot be read, the site column is made from the field as the hub's content type has it.
+   */
+  private async _getHubSiteColumns(): Promise<HubSiteColumn[]> {
+    try {
+      return await this.web.fields.select('InternalName', 'SchemaXml')<HubSiteColumn[]>()
+    } catch (error) {
+      Logger.log({
+        message: `(PortalDataService) (syncList) Could not read the hub's site columns, so a site column of the project site is made from the field as the hub's content type has it.`,
+        data: error,
+        level: LogLevel.Warning
+      })
+      return []
+    }
   }
 
   /**

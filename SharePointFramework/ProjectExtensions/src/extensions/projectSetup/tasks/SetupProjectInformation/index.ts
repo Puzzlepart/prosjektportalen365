@@ -97,7 +97,10 @@ export class SetupProjectInformation extends BaseTask {
         const { list } = await this.params.portalDataService.syncList({
           url: this.params.webAbsoluteUrl,
           listName: resource.Lists_ProjectProperties_Title,
-          contentTypeId: this._templateParameters.ProjectContentTypeId
+          contentTypeId: this._templateParameters.ProjectContentTypeId,
+          // The portfolio finds a shielded project's properties by search, which gives the values
+          // of the fields added from a site column only. The project is not shielded yet here.
+          fromSiteColumns: !!this.data.isShieldedProject
         })
         this.onProgress(
           strings.SetupProjectInformationText,

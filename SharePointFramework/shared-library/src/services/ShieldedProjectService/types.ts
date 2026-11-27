@@ -26,8 +26,10 @@ export type EnsureProjectDataListParams = {
   hidden?: boolean
 
   /**
-   * Whether the list also gets the fields the hub list has outside its content type: columns of
-   * the list itself, such as those PP-assistenten writes its analysis of a status report to.
+   * Whether the list also gets the fields the hub list has given its own copy of the content type
+   * beyond the content type's own, such as those PP-assistenten writes its analysis of a status
+   * report to. The fields of the hub list's other content types are other templates', and are
+   * left out.
    */
   includeHubListFields?: boolean
 

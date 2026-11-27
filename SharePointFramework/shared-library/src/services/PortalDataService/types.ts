@@ -159,6 +159,15 @@ export type SyncListParams = {
   properties?: Record<string, string>
 
   /**
+   * Whether every field the list lacks is added from a site column of the project site, made from
+   * the hub field's schema where the site has none. By default it is for a shielded project,
+   * whose properties the portfolio finds by search: search gives a list field's values only when
+   * the field was added from a site column. The setup says so itself, since a project it is
+   * shielding is not shielded yet when its properties list is made.
+   */
+  fromSiteColumns?: boolean
+
+  /**
    * Progress function to call during the sync process.
    */
   progressFunc?: (progress: string) => void
