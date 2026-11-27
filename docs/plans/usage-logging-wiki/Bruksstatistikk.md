@@ -4,7 +4,7 @@
 
 # Bruksstatistikk
 
-Prosjektportalen sender fra versjon 1.15 bruksstatistikk til Prosjektportalen-teamet i Puzzlepart,
+Prosjektportalen sender fra versjon 1.15 bruksstatistikk til Prosjektportalen-teamet i SoftwareOne,
 slik at vi ser hvilke versjoner som er i bruk, hvilke deler av løsningen som brukes, og hvor mye. Vi
 teller bruk, ikke personer: ingenting om brukerne, innholdet eller adressene til prosjektområdene
 sendes, og ingenting lagres i nettleseren.
@@ -278,11 +278,11 @@ gjenspeile det de få gjør. [Juss, L2: om områdekoden er en personopplysning i
 ## Hvor det behandles, og hvor lenge det lagres
 
 Bruksstatistikk og hendelser fra malpakkekatalogen behandles i EU (Stockholm) og lagres i EU
-(Frankfurt) hos Puzzlepart. Tallene lagres uten tidsbegrensning. Kodene som brukes til å telle ulike
+(Frankfurt) hos SoftwareOne. Tallene lagres uten tidsbegrensning. Kodene som brukes til å telle ulike
 områder, slettes etter 90 dager, og da er bare antallet igjen. Opplysningene på nivå 1 lagres bare
 som siste verdi med uken de kom, og som siste verdi per måned. Hendelser fra malpakkekatalogen lagres
 uten tidsbegrensning. Installasjonsmeldinger lagres i Prosjektportalen-teamets Azure-abonnement
-[region bekreftes] og hos Puzzlepart i EU (Frankfurt), uten fastsatt sletting. Sletting på
+[region bekreftes] og hos SoftwareOne i EU (Frankfurt), uten fastsatt sletting. Sletting på
 forespørsel gjelder bruksstatistikk og hendelser fra malpakkekatalogen, ikke installasjonsmeldinger.
 
 ID-ene som hindrer at samme sending lagres to ganger (`batchId`), slettes etter sju dager.
@@ -293,7 +293,7 @@ tenanten. [Juss, L4: lagringstiden uten tidsbegrensning bekreftes.]
 
 ## Roller og behandlingsgrunnlag
 
-[Juss, L2: Puzzlepart er behandlingsansvarlig for bruksstatistikken. Grunnlaget er
+[Juss, L2: SoftwareOne er behandlingsansvarlig for bruksstatistikken. Grunnlaget er
 personvernforordningen artikkel 6 nr. 1 bokstav f, berettiget interesse, med en skriftlig
 interesseavveining. Retten til å protestere ivaretas med innstillingen, Global Privacy Control og
 Do Not Track.]
