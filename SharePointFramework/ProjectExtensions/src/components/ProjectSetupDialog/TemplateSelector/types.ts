@@ -1,2 +1,2 @@
-/** Whether setup applies a template or only the selected additions. */
-export type TemplateSelectorMode = 'notemplate' | 'selecttemplate'
+/** Up to this many templates are shown as cards, all visible at once; more go in a dropdown. */
+export const TEMPLATE_CARDS_MAX = 4

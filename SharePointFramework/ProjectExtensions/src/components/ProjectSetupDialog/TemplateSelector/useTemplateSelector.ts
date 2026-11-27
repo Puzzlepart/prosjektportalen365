@@ -1,9 +1,7 @@
 import { useAnnounce } from '@fluentui/react-components'
 import { Logger, LogLevel } from '@pnp/logging'
 import strings from 'ProjectExtensionsStrings'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { isEmpty } from 'underscore'
-import { ProjectSetupValidation } from '../../../extensions/projectSetup/types'
+import { useEffect, useMemo, useRef } from 'react'
 import { useProjectSetupDialogContext } from '../context'
 import {
   ON_CLOUD_TEMPLATE_ERROR,
@@ -13,63 +11,36 @@ import {
 } from '../reducer'
 import { createNoTemplateOption } from '../../../extensions/projectSetup/noTemplate'
 import { resolveCloudTemplate } from '../resolveCloudTemplate'
-import { TemplateSelectorMode } from './types'
+import { TEMPLATE_CARDS_MAX } from './types'
 import { format } from 'pp365-shared-library'
 import { trackError } from 'pp365-shared-library/lib/telemetry'
 
-/** Manages template search and selection, resolving cloud packages with status announcements. */
+/** Offers the templates to choose from, resolving cloud packages with status announcements. */
 export function useTemplateSelector() {
   const context = useProjectSetupDialogContext()
   const hasExistingTemplate = context.props.data.hasExistingTemplate
 
-  const initialMode: TemplateSelectorMode = hasExistingTemplate ? 'notemplate' : 'selecttemplate'
-  const [mode, setMode] = useState<TemplateSelectorMode>(initialMode)
-  const [query, setQuery] = useState<string>('')
-
-  const defaultTemplate = (() => {
-    const [def] = context.props.data.templates.filter((t) => t.isDefault)
-    return def || context.props.data.templates[0]
-  })()
-
   const templates = context.props.data.templates
     .filter((t) => !t.hidden)
-    .sort((a, b) => a.text.localeCompare(b.text, 'nb'))
-  const selectedTemplate = context.state.selectedTemplate
-  const isSingleTemplate = templates.length === 1
-
-  const matchingTemplates = useMemo(() => {
-    if (!query) return templates
-    const lowerQuery = query.toLowerCase()
-    return templates.filter(
-      (t) =>
-        t.text.toLowerCase().includes(lowerQuery) || t.subText?.toLowerCase().includes(lowerQuery)
+    // The default template first, where the eye starts; the rest by title.
+    .sort(
+      (a, b) => Number(!!b.isDefault) - Number(!!a.isDefault) || a.text.localeCompare(b.text, 'nb')
     )
-  }, [templates, query])
+  // A project that has a template can be set up again without one: the first choice then.
+  const noTemplate = useMemo(() => createNoTemplateOption(), [])
+  const selectedTemplate = context.state.selectedTemplate
+  const offered = hasExistingTemplate ? [noTemplate, ...templates] : templates
+  // A hidden template can still be the default: shown while it is the one that will be applied.
+  const choices =
+    selectedTemplate && !offered.some((t) => t.id === selectedTemplate.id)
+      ? [...offered, selectedTemplate]
+      : offered
+  const selectedValue = selectedTemplate ? String(selectedTemplate.id) : ''
+  const showAsCards = choices.length <= TEMPLATE_CARDS_MAX
 
-  const onModeChanged = (_: any, data: { value: string }) => {
-    const newMode = data.value as TemplateSelectorMode
-    setMode(newMode)
-    if (newMode === 'notemplate') {
-      context.dispatch(ON_TEMPLATE_CHANGED(createNoTemplateOption()))
-    } else {
-      if (defaultTemplate) {
-        context.dispatch(ON_TEMPLATE_CHANGED(defaultTemplate))
-      }
-    }
-  }
-
-  const onTemplateSelect = (_: any, data: any) => {
-    const templateId = data.optionValue
-    const template = templates.find((t) => String(t.id) === templateId)
-    if (template) {
-      context.dispatch(ON_TEMPLATE_CHANGED(template))
-    }
-    setQuery('')
-  }
-
-  const onClearTemplate = () => {
-    context.dispatch(ON_TEMPLATE_CHANGED(null))
-    setQuery('')
+  const onTemplateChange = (value: string) => {
+    const template = choices.find((t) => String(t.id) === value)
+    if (template) context.dispatch(ON_TEMPLATE_CHANGED(template))
   }
 
   const isCloudTemplate = !!selectedTemplate?.isCloudTemplate
@@ -129,43 +100,15 @@ export function useTemplateSelector() {
     }
   }, [selectedTemplate?.id])
 
-  const templateHasExtensions = !isEmpty(selectedTemplate?.extensions)
-  const templateHasContentConfig = !isEmpty(selectedTemplate?.contentConfig)
-
-  const validationMessage =
-    templateHasExtensions || templateHasContentConfig
-      ? format(
-          strings.TemplateConfigMessage,
-          selectedTemplate?.text,
-          [
-            templateHasExtensions && strings.ExtensionsSectionHeaderText,
-            templateHasContentConfig && strings.ContentConfigSectionHeaderText
-          ]
-            .filter(Boolean)
-            .join(strings.TemplateConfigConjunction)
-            .toLowerCase()
-        )
-      : undefined
-
-  const showPlannerWarning = context.props.validation === ProjectSetupValidation.UserNotGroupMember
-
   return {
-    mode,
-    hasExistingTemplate,
-    templates,
-    matchingTemplates,
-    query,
+    choices,
     selectedTemplate,
-    isSingleTemplate,
-    validationMessage,
-    showPlannerWarning,
+    selectedValue,
+    showAsCards,
     isCloudTemplate,
     isResolvingCloudTemplate,
     cloudTemplateError,
     cloudIncompatibleMessage,
-    onModeChanged,
-    onTemplateSelect,
-    onClearTemplate,
-    setQuery
+    onTemplateChange
   }
 }

@@ -1,20 +1,18 @@
 // The section's hook reads the setup dialog's context and data, so it is mocked before the
-// component is imported; the test controls the items and the selection. The columns are the real
-// ones, so a column that stops rendering its text fails here.
-const mockOnSelectionChange = jest.fn()
+// component is imported; the test controls the items and the selection. The group that lists
+// them is the real one, so a group that stops rendering an item's text fails here.
+const mockOnToggle = jest.fn()
 const mockOnSearch = jest.fn()
+const mockSection = { items: [] as any[], showSearch: false }
 jest.mock('./useExtensionsSection', () => ({
   useExtensionsSection: () => ({
-    items: [
-      { key: 'a', text: 'Alfa', subText: 'Beskrivelse av Alfa' },
-      { key: 'b', text: 'Bravo', subText: 'Beskrivelse av Bravo' }
-    ],
-    columns: jest.requireActual('./useColumns').useColumns(new Set(['a'])),
-    selectedRowIds: new Set(['a']),
-    onSelectionChange: mockOnSelectionChange,
+    items: mockSection.items,
+    selectedKeys: new Set(['a']),
+    onToggle: mockOnToggle,
     searchTerm: '',
     onSearch: mockOnSearch,
-    selectedCountText: '1 valgt element',
+    showSearch: mockSection.showSearch,
+    countText: '1 av 2 valgt',
     lockedKeys: new Set(['a'])
   })
 }))
@@ -22,73 +20,89 @@ jest.mock('./useExtensionsSection', () => ({
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
-import { layOutForTabster } from 'pp365-jest-config/lib/tabsterLayout'
 import strings from 'ProjectExtensionsStrings'
 import * as React from 'react'
 import { ExtensionsSection } from './ExtensionsSection'
 
+const ITEMS = [
+  { key: 'a', text: 'Alfa', subText: 'Beskrivelse av Alfa' },
+  { key: 'b', text: 'Bravo', subText: 'Beskrivelse av Bravo' }
+]
+
 describe('ExtensionsSection', () => {
-  it('lists the items with their descriptions', () => {
-    render(<ExtensionsSection />)
-    expect(screen.getByText('Alfa')).toBeInTheDocument()
-    expect(screen.getByText('Beskrivelse av Bravo')).toBeInTheDocument()
+  beforeEach(() => {
+    mockSection.items = ITEMS
+    mockSection.showSearch = false
+    mockOnToggle.mockClear()
   })
 
-  it('shows the picked item as checked and reports a new pick by id', async () => {
-    const user = userEvent.setup({ pointerEventsCheck: 0 })
-    render(<ExtensionsSection />)
-    // The first checkbox selects all; the rest are one per row, in row order.
-    const checkboxes = screen.getAllByRole('checkbox')
-    expect(checkboxes[1]).toBeChecked()
-    expect(checkboxes[2]).not.toBeChecked()
-    await user.click(checkboxes[2])
-    expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
-  })
-
-  it('names its search box, and the lock on an item that cannot be left out (WCAG 1.1.1, 4.1.2)', () => {
-    render(<ExtensionsSection />)
-    expect(
-      screen.getByRole('searchbox', { name: strings.ExtensionsSectionSearchLabel })
-    ).toBeInTheDocument()
-    expect(
-      screen.getByRole('img', { name: strings.ExtensionLockedTooltipText })
-    ).toBeInTheDocument()
-  })
-
-  it('tells how many are selected as a status, not as a button (WCAG 4.1.2, 4.1.3)', async () => {
+  it('lists the items with their descriptions under its heading, and breaks no rule axe can check', async () => {
     const { container } = render(<ExtensionsSection />)
-    expect(screen.getByRole('status')).toHaveTextContent('1 valgt element')
-    expect(screen.queryByRole('button', { name: '1 valgt element' })).toBeNull()
+    const group = screen.getByRole('group', { name: strings.ExtensionsSectionHeaderText })
+    expect(group).toHaveTextContent('Alfa')
+    expect(screen.getByRole('checkbox', { name: 'Bravo' })).toHaveAccessibleDescription(
+      'Beskrivelse av Bravo'
+    )
     expect(await axeComponent(container)).toHaveNoViolations()
   })
 
-  it('takes Tab from the search box to the first item that can be changed, and the arrows on between the items (Puzzlepart/prosjektportalen365-testing#130)', async () => {
-    // Tab landed on «Velg alle» in the list's header, the next Tab left the list, and the items
-    // were reached only with the arrows. Alfa is required by the template, so the list starts at
-    // Bravo, the first item the user can change.
-    const restore = layOutForTabster()
-    try {
-      const user = userEvent.setup({ pointerEventsCheck: 0 })
-      render(<ExtensionsSection />)
-      screen.getByRole('searchbox').focus()
-      await user.tab()
-      expect(document.activeElement).toHaveAttribute('role', 'gridcell')
-      expect(document.activeElement).toHaveTextContent('Bravo')
-      await user.keyboard(' ')
-      expect(mockOnSelectionChange).toHaveBeenLastCalledWith(['a', 'b'])
-      await user.keyboard('{ArrowUp}')
-      expect(document.activeElement).toHaveTextContent('Alfa')
-      await user.keyboard('{ArrowDown}')
-      expect(document.activeElement).toHaveTextContent('Bravo')
-    } finally {
-      restore()
-    }
-  })
-
-  it('passes what is typed to the search', async () => {
+  it('shows the picked item as checked and reports a new pick by its key', async () => {
     const user = userEvent.setup({ pointerEventsCheck: 0 })
     render(<ExtensionsSection />)
-    await user.type(screen.getByRole('searchbox'), 'A')
+    const bravo = screen.getByRole('checkbox', { name: 'Bravo' })
+    expect(bravo).not.toBeChecked()
+    await user.click(bravo)
+    expect(mockOnToggle).toHaveBeenLastCalledWith('b', true)
+  })
+
+  it('marks an item that cannot be left out as required, keeps it checked and in reach of the keyboard (WCAG 1.1.1, 2.1.1, 4.1.2)', async () => {
+    const user = userEvent.setup({ pointerEventsCheck: 0 })
+    render(<ExtensionsSection />)
+    const alfa = screen.getByRole('checkbox', {
+      name: (name) => name.startsWith('Alfa') && name.includes(strings.RequiredItemLabel)
+    })
+    expect(alfa).toBeChecked()
+    expect(alfa).toHaveAttribute('aria-disabled', 'true')
+    expect(alfa).not.toBeDisabled()
+    expect(screen.getByTitle(strings.ExtensionLockedTooltipText)).toBeInTheDocument()
+    await user.click(alfa)
+    expect(mockOnToggle).not.toHaveBeenCalled()
+  })
+
+  it('tells how many are selected as a status (WCAG 4.1.3)', () => {
+    render(<ExtensionsSection />)
+    expect(screen.getByRole('status')).toHaveTextContent('1 av 2 valgt')
+  })
+
+  it('has no search box for a short list, and a named one that passes on what is typed for a long one', async () => {
+    const user = userEvent.setup({ pointerEventsCheck: 0 })
+    const { unmount } = render(<ExtensionsSection />)
+    expect(screen.queryByRole('searchbox')).toBeNull()
+    unmount()
+    mockSection.showSearch = true
+    render(<ExtensionsSection />)
+    await user.type(
+      screen.getByRole('searchbox', { name: strings.ExtensionsSectionSearchLabel }),
+      'A'
+    )
     expect(mockOnSearch).toHaveBeenCalledWith('A')
+  })
+
+  it('says so in plain text when there is nothing to choose, in reach of every user (WCAG 1.3.1)', () => {
+    mockSection.items = []
+    render(<ExtensionsSection />)
+    expect(
+      screen.getByRole('group', { name: strings.ExtensionsSectionHeaderText })
+    ).toHaveTextContent(strings.ExtensionsSectionDisabledTooltip)
+    expect(screen.queryByRole('status')).toBeNull()
+  })
+
+  it('explains what extensions are behind a named info button (WCAG 4.1.2)', () => {
+    render(<ExtensionsSection />)
+    expect(
+      screen.getByRole('button', {
+        name: strings.AboutSectionLabel.replace('{0}', strings.ExtensionsSectionHeaderText)
+      })
+    ).toBeInTheDocument()
   })
 })

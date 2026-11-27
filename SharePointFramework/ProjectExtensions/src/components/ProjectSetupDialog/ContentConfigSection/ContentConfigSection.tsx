@@ -1,9 +1,15 @@
-import { SearchBox } from '@fluentui/react-components'
+import {
+  Badge,
+  Button,
+  MessageBar,
+  MessageBarActions,
+  MessageBarBody,
+  Spinner
+} from '@fluentui/react-components'
 import strings from 'ProjectExtensionsStrings'
-import { DataGridList, getFluentIcon, getSearchBoxDismissProps } from 'pp365-shared-library'
 import React from 'react'
+import { SelectionGroup } from '../SelectionGroup'
 import { ProjectSetupDialogSectionComponent } from '../types'
-import styles from './ContentConfigSection.module.scss'
 import { useContentConfigSection } from './useContentConfigSection'
 
 /**
@@ -12,49 +18,66 @@ import { useContentConfigSection } from './useContentConfigSection'
 export const ContentConfigSection: ProjectSetupDialogSectionComponent = () => {
   const {
     items,
-    columns,
-    selectedRowIds,
-    onSelectionChange,
+    selectedKeys,
+    onToggle,
     searchTerm,
     onSearch,
-    selectedCountText,
+    showSearch,
+    countText,
     lockedKeys,
-    hasAddedItems
+    addedKeys,
+    plannerKeys,
+    onCheckMembership,
+    isCheckingMembership,
+    membershipCheckFailed
   } = useContentConfigSection()
 
   return (
-    <div className={styles.root}>
-      <div className={styles.commands}>
-        <div className={styles.search}>
-          <SearchBox
-            dismiss={getSearchBoxDismissProps()}
-            placeholder={strings.ContentConfigSectionSearchPlaceholder}
-            aria-label={strings.ContentConfigSectionSearchLabel}
-            value={searchTerm}
-            onChange={(_, { value }) => onSearch(value)}
-            size='large'
-            appearance='filled-lighter'
-            className={styles.searchBox}
-            contentAfter={{ onClick: () => onSearch('') }}
-          />
-        </div>
-        <span className={styles.selectedCount} role='status'>
-          {getFluentIcon('CheckmarkCircle', { size: 20 })}
-          {selectedCountText}
-        </span>
-      </div>
-      {hasAddedItems && <p className={styles.addedInfo}>{strings.ContentConfigAddedInfoText}</p>}
-      <DataGridList
-        items={items}
-        columns={columns}
-        getRowId={(item) => String(item.key)}
-        getRowName={(item) => item.text}
-        selectionMode='multiselect'
-        selectedItems={selectedRowIds}
-        onSelectionChange={onSelectionChange}
-        lockedItems={lockedKeys}
-        sortable
-      />
-    </div>
+    <SelectionGroup
+      title={strings.ContentConfigSectionHeaderText}
+      info={strings.ContentConfigSectionTooltip}
+      items={items}
+      selectedKeys={selectedKeys}
+      lockedKeys={lockedKeys}
+      lockedText={strings.ContentConfigLockedTooltipText}
+      onToggle={onToggle}
+      countText={countText}
+      emptyText={strings.ContentConfigSectionDisabledTooltip}
+      note={addedKeys.size > 0 ? strings.ContentConfigAddedInfoText : undefined}
+      showSearch={showSearch}
+      searchTerm={searchTerm}
+      onSearch={onSearch}
+      searchLabel={strings.ContentConfigSectionSearchLabel}
+      searchPlaceholder={strings.ContentConfigSectionSearchPlaceholder}
+      renderItemBadge={(item) =>
+        addedKeys.has(String(item.key)) && (
+          <Badge appearance='tint' color='informative' size='small'>
+            {strings.ContentConfigAddedText}
+          </Badge>
+        )
+      }
+      renderItemMessage={(item) =>
+        plannerKeys.has(String(item.key)) && (
+          <MessageBar intent='warning' layout='multiline'>
+            <MessageBarBody>
+              {strings.PlannerMembershipPendingMessage}
+              {membershipCheckFailed && ` ${strings.PlannerMembershipStillPendingText}`}
+            </MessageBarBody>
+            {onCheckMembership && (
+              <MessageBarActions>
+                <Button
+                  size='small'
+                  disabledFocusable={isCheckingMembership}
+                  icon={isCheckingMembership ? <Spinner size='tiny' /> : undefined}
+                  onClick={onCheckMembership}
+                >
+                  {strings.PlannerMembershipRecheckButtonText}
+                </Button>
+              </MessageBarActions>
+            )}
+          </MessageBar>
+        )
+      }
+    />
   )
 }

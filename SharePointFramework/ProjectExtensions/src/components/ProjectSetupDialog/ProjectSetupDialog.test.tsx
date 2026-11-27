@@ -39,45 +39,26 @@ jest.mock('./ContentConfigSection', () => {
 jest.mock('@fluentui/react-components', () => {
   const actual = jest.requireActual('@fluentui/react-components')
   const React = jest.requireActual('react')
-  /**
-   * Adapts native option changes to Fluent's selection callback; the button that opens the list
-   * takes its `expandIcon` props.
-   */
-  const Combobox = ({
-    placeholder,
-    disabled,
-    selectedOptions,
-    onOptionSelect,
-    expandIcon,
-    children
-  }: any) =>
+  /** Adapts native option changes to Fluent's selection callback. */
+  const Dropdown = ({ placeholder, selectedOptions, onOptionSelect, children }: any) =>
     React.createElement(
-      React.Fragment,
-      null,
-      React.createElement(
-        'select',
-        {
-          'aria-label': placeholder,
-          disabled,
-          value: selectedOptions?.[0] ?? '',
-          onChange: (event: any) => {
-            const option = event.target.options[event.target.selectedIndex]
-            onOptionSelect?.(event, {
-              optionValue: option.value,
-              optionText: option.textContent,
-              selectedOptions: [option.value]
-            })
-          }
-        },
-        React.createElement('option', { value: '' }),
-        children
-      ),
-      React.createElement('span', {
-        role: 'button',
-        'aria-label': expandIcon?.['aria-label'] ?? 'Open'
-      })
+      'select',
+      {
+        'aria-label': placeholder,
+        value: selectedOptions?.[0] ?? '',
+        onChange: (event: any) => {
+          const option = event.target.options[event.target.selectedIndex]
+          onOptionSelect?.(event, {
+            optionValue: option.value,
+            optionText: option.textContent,
+            selectedOptions: [option.value]
+          })
+        }
+      },
+      React.createElement('option', { value: '' }),
+      children
     )
-  /** Supplies native options to the combobox stand-in. */
+  /** Supplies native options to the dropdown stand-in. */
   const Option = ({ value, text, disabled }: any) =>
     React.createElement('option', { value, disabled }, text)
   /** Records announcements while retaining Fluent's live-region behavior. */
@@ -93,20 +74,19 @@ jest.mock('@fluentui/react-components', () => {
       [announce]
     )
   }
-  return { __esModule: true, ...actual, Combobox, Option, useAnnounce }
+  return { __esModule: true, ...actual, Dropdown, Option, useAnnounce }
 })
 
 import { AriaLiveAnnouncer } from '@fluentui/react-components'
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
 import strings from 'ProjectExtensionsStrings'
 import { axeComponent } from 'pp365-jest-config/lib/axe'
-import { format, getComboboxExpandIconProps } from 'pp365-shared-library'
+import { format } from 'pp365-shared-library'
 import {
   countedTelemetry,
   startTestTelemetry
 } from 'pp365-shared-library/lib/telemetry/__fixtures__/testFixtures'
 import * as React from 'react'
-import { ProjectSetupValidation } from '../../extensions/projectSetup/types'
 import { ProjectSetupDialog } from './ProjectSetupDialog'
 import { TEMPLATES, extension, setupData, template } from './testFixtures'
 import { announced } from 'pp365-jest-config/lib/announce'
@@ -130,7 +110,8 @@ function renderDialog(props: Record<string, any> = {}) {
   return { onSubmit, onDismiss }
 }
 
-const picker = () => screen.getByLabelText(strings.ProjectTemplateSelectorSearchPlaceholder)
+const card = (name: string) => screen.getByRole('radio', { name })
+const choose = (name: string) => fireEvent.click(card(name))
 const submit = () => screen.getByText(strings.ProjectSetupDialogSubmitButtonText).closest('button')
 const listed = (label: string) =>
   within(screen.getByLabelText(label))
@@ -147,16 +128,12 @@ describe('ProjectSetupDialog', () => {
     const { onSubmit } = renderDialog()
     expect(screen.getByText(strings.ProjectSetupDialogTitle)).toBeInTheDocument()
     expect(screen.getByText(strings.ProjectSetupDialogInfoText)).toBeInTheDocument()
-    expect(picker()).toHaveValue('1')
+    expect(card('Standardmal')).toBeChecked()
+    expect(card('Standardmal')).toHaveAccessibleDescription('Om Standardmal')
     expect(listed('Valgte prosjekttillegg')).toEqual(['Gevinstoversikt'])
+    // What the template selects is told beside the button, not in a message of its own.
     expect(
-      screen.getByText(
-        format(
-          strings.TemplateConfigMessage,
-          'Standardmal',
-          `${strings.ExtensionsSectionHeaderText}${strings.TemplateConfigConjunction}${strings.ContentConfigSectionHeaderText}`.toLowerCase()
-        )
-      )
+      screen.getByText(format(strings.SetupSummaryLabel, 'Standardmal', 1, 1))
     ).toBeInTheDocument()
     fireEvent.click(submit())
     const [state] = onSubmit.mock.calls[0]
@@ -167,13 +144,9 @@ describe('ProjectSetupDialog', () => {
 
   it("sets up with another template's selection once that template is chosen", () => {
     const { onSubmit } = renderDialog()
-    fireEvent.change(picker(), { target: { value: '2' } })
+    choose('Byggeprosjekt')
     expect(listed('Valgte prosjekttillegg')).toEqual(['Risikomatrise'])
-    fireEvent.click(
-      screen.getByRole('tab', {
-        name: (name) => name.includes(strings.ContentConfigSectionHeaderText)
-      })
-    )
+    // Both groups are on the page at once: nothing is behind a tab.
     expect(listed('Valgt standardinnhold')).toEqual(['Fasesjekkliste', 'Planner'])
     fireEvent.click(submit())
     expect(onSubmit.mock.calls[0][0].selectedTemplate.text).toBe('Byggeprosjekt')
@@ -181,57 +154,46 @@ describe('ProjectSetupDialog', () => {
 
   it('runs without a template on a project that has one, unless a template is chosen', () => {
     const { onSubmit } = renderDialog({ data: setupData({ hasExistingTemplate: true }) })
-    expect(screen.getByLabelText(strings.ProjectTemplateSelectorNoTemplateRadioLabel)).toBeChecked()
-    expect(screen.queryByLabelText(strings.ProjectTemplateSelectorSearchPlaceholder)).toBeNull()
+    expect(card(strings.ProjectTemplateSelectorNoTemplateLabel)).toBeChecked()
     fireEvent.click(submit())
     expect(onSubmit.mock.calls[0][0].selectedTemplate.text).toBe(
       strings.ProjectTemplateSelectorNoTemplateLabel
     )
-    fireEvent.click(screen.getByLabelText(strings.ProjectTemplateSelectorSelectTemplateRadioLabel))
-    expect(picker()).toHaveValue('1')
+    choose('Standardmal')
+    fireEvent.click(submit())
+    expect(onSubmit.mock.calls[1][0].selectedTemplate.text).toBe('Standardmal')
   })
 
-  it('names the button that opens the templates from the strings, not «Open» (WCAG 3.1.2, 4.1.2)', () => {
+  it('shows the templates as a named group of choices, all visible at once (WCAG 1.3.1, 4.1.2)', () => {
     renderDialog()
-    expect(
-      screen.getByLabelText(getComboboxExpandIconProps()['aria-label'], { selector: 'span' })
-    ).toBeInTheDocument()
+    const group = screen.getByRole('radiogroup', { name: strings.ProjectTemplateSelectorTitle })
+    expect(within(group).getAllByRole('radio')).toHaveLength(2)
   })
 
-  it('names its choice of whether to use a template (WCAG 1.3.1, 4.1.2)', () => {
-    renderDialog({ data: setupData({ hasExistingTemplate: true }) })
-    expect(
-      screen.getByRole('radiogroup', { name: strings.ProjectTemplateSelectorModeLabel })
-    ).toBeInTheDocument()
+  it('offers more than four templates in a dropdown named as the cards are', () => {
+    const more = [3, 4, 5].map((id) => template(id, `Mal ${id}`))
+    const { onSubmit } = renderDialog({ data: setupData({ templates: [...TEMPLATES, ...more] }) })
+    expect(screen.queryByRole('radio')).toBeNull()
+    const dropdown = screen.getByLabelText(strings.ProjectTemplateSelectorPlaceholder)
+    expect(dropdown).toHaveValue('1')
+    fireEvent.change(dropdown, { target: { value: '4' } })
+    fireEvent.click(submit())
+    expect(onSubmit.mock.calls[0][0].selectedTemplate.text).toBe('Mal 4')
   })
 
-  it('ties each section to its tab, which tells how many are chosen in it, and breaks no rule axe can check (WCAG 1.3.1, 4.1.2)', async () => {
+  it('shows both groups under each other, and breaks no rule axe can check (WCAG 1.3.1, 4.1.2)', async () => {
     renderDialog()
-    const name = format(strings.ConfigTabSelectedLabel, strings.ExtensionsSectionHeaderText, 1)
-    expect(screen.getByRole('tab', { name })).toHaveAttribute('aria-selected', 'true')
-    expect(
-      within(screen.getByRole('tabpanel', { name })).getByText('Gevinstoversikt')
-    ).toBeInTheDocument()
+    expect(screen.queryByRole('tab')).toBeNull()
+    expect(listed('Valgte prosjekttillegg')).toEqual(['Gevinstoversikt'])
+    expect(listed('Valgt standardinnhold')).toEqual(['Fasesjekkliste'])
     expect(await axeComponent(screen.getByRole('alertdialog'))).toHaveNoViolations()
-  })
-
-  it('lets the keyboard reach a section with nothing to choose, which says so (WCAG 2.1.1, 1.3.1)', () => {
-    // A disabled tab is skipped by the keyboard, and why it was disabled was only in its tooltip.
-    renderDialog({ data: setupData({ extensions: [] }) })
-    const tab = screen.getByRole('tab', { name: new RegExp(strings.ExtensionsSectionHeaderText) })
-    expect(tab).not.toBeDisabled()
-    fireEvent.click(tab)
-    expect(tab).toHaveAttribute('aria-selected', 'true')
-    expect(
-      within(screen.getByRole('tabpanel')).getByText(strings.ExtensionsSectionDisabledTooltip)
-    ).toBeInTheDocument()
   })
 
   it('tells while a cloud template is read, and when it is ready (WCAG 4.1.3)', async () => {
     let finish: (value: any) => void
     cloud.resolve.mockImplementation(() => new Promise((resolve) => (finish = resolve)))
     renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
-    fireEvent.change(picker(), { target: { value: '3' } })
+    choose('Skymal')
     await waitFor(() => expect(announced()).toContain(strings.CloudTemplateResolvingMessage))
     // A hidden message's announcement waited in the queue and came out with this one.
     expect(announced()).not.toContain(strings.ProjectDataFoundTitle)
@@ -251,11 +213,11 @@ describe('ProjectSetupDialog', () => {
   it('does not tell a cloud template is ready when another template is chosen while it is read (WCAG 4.1.3)', async () => {
     cloud.resolve.mockImplementation(() => new Promise(() => undefined))
     renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
-    fireEvent.change(picker(), { target: { value: '3' } })
+    choose('Skymal')
     await waitFor(() => expect(announcements).toContain(strings.CloudTemplateResolvingMessage))
     // Choosing another template stops the reading, with nothing read: «ready» was said all the same.
     announcements.length = 0
-    fireEvent.change(picker(), { target: { value: '2' } })
+    choose('Byggeprosjekt')
     await act(() => new Promise((resolve) => setTimeout(resolve, 50)))
     expect(announcements).not.toContain(strings.CloudTemplateResolved)
   })
@@ -307,11 +269,6 @@ describe('ProjectSetupDialog', () => {
     expect(await axeComponent(dialog)).toHaveNoViolations()
   })
 
-  it('warns that Planner needs membership of the group', () => {
-    renderDialog({ validation: ProjectSetupValidation.UserNotGroupMember })
-    expect(screen.getByText(strings.PlannerMemberWarningMessage)).toBeInTheDocument()
-  })
-
   it('closes', () => {
     const { onDismiss } = renderDialog()
     fireEvent.click(screen.getByText(strings.CloseModalText))
@@ -328,7 +285,7 @@ describe('ProjectSetupDialog', () => {
       })
     )
     const { onSubmit } = renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
-    fireEvent.change(picker(), { target: { value: '3' } })
+    choose('Skymal')
     expect(screen.getByText(strings.CloudTemplateResolvingMessage)).toBeInTheDocument()
     expect(submit()).toBeDisabled()
     expect(await screen.findByText('Skytillegg')).toBeInTheDocument()
@@ -347,7 +304,7 @@ describe('ProjectSetupDialog', () => {
       })
     )
     renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
-    fireEvent.change(picker(), { target: { value: '3' } })
+    choose('Skymal')
     expect(
       await screen.findByText(format(strings.CloudTemplateNotCompatibleWarning, 'Skymal'))
     ).toBeInTheDocument()
@@ -363,7 +320,7 @@ describe('ProjectSetupDialog', () => {
       )
     )
     renderDialog({ data: setupData({ templates: [...TEMPLATES, CLOUD] }) })
-    fireEvent.change(picker(), { target: { value: '3' } })
+    choose('Skymal')
     expect(await screen.findByText(strings.CloudTemplateResolveErrorMessage)).toBeInTheDocument()
     expect(submit()).toBeDisabled()
     // The wizard is a React root of its own: it counts under the setup's alias without a provider.

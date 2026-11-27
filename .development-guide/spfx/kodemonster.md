@@ -99,10 +99,13 @@ ProjectSetupDialog/
 ├── TemplateSelector/                     # Underkomponent (eget barrel-mønster)
 │   ├── index.ts
 │   └── ...
-├── ExtensionsSection/                    # Underkomponent
+├── SelectionGroup/                       # Delt presentasjon: tittel, antall valgt og avkrysningsliste
 │   ├── index.ts
 │   └── ...
-└── ContentConfigSection/                 # Underkomponent
+├── ExtensionsSection/                    # Underkomponent (hook + SelectionGroup)
+│   ├── index.ts
+│   └── ...
+└── ContentConfigSection/                 # Underkomponent (hook + SelectionGroup)
     ├── index.ts
     └── ...
 ```
@@ -187,11 +190,10 @@ export function useProjectSetupDialog(props: IProjectSetupDialogProps) {
     props.onSubmit(state)
   }
 
-  const isConfigDisabled = (type: 'extensions' | 'contentConfig'): boolean => {
-    // ... valideringslogikk
-  }
+  const isSubmitDisabled = !state.selectedTemplate || state.isResolvingCloudTemplate
+  // ... oppsummeringen ved knappen
 
-  return { state, dispatch, onSubmit, isConfigDisabled }
+  return { state, dispatch, onSubmit, summaryText, isSubmitDisabled }
 }
 ```
 

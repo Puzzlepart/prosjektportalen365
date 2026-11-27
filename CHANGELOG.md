@@ -8,7 +8,12 @@ Sjekk ut [release notes](./releasenotes/1.15.0.md) for høydepunkter og mer deta
 
 ### Forbedringer
 
+- Oppsettveiviseren har fått nytt oppsett. Opptil fire prosjektmaler vises som valgkort med beskrivelse, flere enn det i en nedtrekksliste, og standardmalen står først. På et prosjekt som allerede har mal, er «Ingen mal» ett av valgene. Prosjekttillegg og standardinnhold står under hverandre som avkrysningslister i stedet for i faner, med «2 av 5 valgt» ved hver gruppe og en oppsummering ved knappen. Søkefeltet vises bare når en gruppe har flere enn åtte elementer, og meldingen om hva malen inneholder er fjernet
+- Varselet om medlemskap i Microsoft 365-gruppen i oppsettveiviseren står nå ved Planner-innholdet det gjelder, forklarer at registreringen tar noen minutter på et nytt område, og har knappen «Sjekk på nytt»
+
 ### Feilrettinger
+
+- Standardinnhold og prosjekttillegg i oppsettveiviseren ble kuttet uten rullefelt når meldingene over tok plassen, slik at bare det første elementet var synlig. Hele innholdet ruller nå i ett område over knappene
 
 ---
 

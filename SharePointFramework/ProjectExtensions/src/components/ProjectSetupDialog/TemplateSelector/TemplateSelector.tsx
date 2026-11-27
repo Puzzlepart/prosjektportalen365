@@ -1,131 +1,119 @@
 import {
   Badge,
-  Combobox,
+  Dropdown,
+  Field,
   Option,
   Radio,
   RadioGroup,
   Spinner,
-  Text
+  Text,
+  useId
 } from '@fluentui/react-components'
 import { Cloud16Regular, Cloud24Regular } from '@fluentui/react-icons'
+import { ProjectTemplate, getFluentIconWithFallback, UserMessage } from 'pp365-shared-library'
 import strings from 'ProjectExtensionsStrings'
-import {
-  FieldContainer,
-  getComboboxExpandIconProps,
-  getFluentIconWithFallback,
-  UserMessage
-} from 'pp365-shared-library'
 import React from 'react'
 import { ProjectSetupDialogSectionComponent } from '../types'
 import styles from './TemplateSelector.module.scss'
 import { useTemplateSelector } from './useTemplateSelector'
 
-/** Renders the template-selection section in the project setup dialog. */
+/**
+ * A template's icon, name and description, as its card's and its dropdown option's content.
+ */
+function renderTemplate(template: ProjectTemplate, titleId?: string, descriptionId?: string) {
+  return (
+    <div className={styles.option}>
+      {template.iconProps?.iconName && (
+        <span className={styles.optionIcon}>
+          {getFluentIconWithFallback(template.iconProps.iconName)}
+        </span>
+      )}
+      <div className={styles.optionContent}>
+        <div className={styles.optionTitleRow}>
+          <Text weight='semibold' id={titleId}>
+            {template.text}
+          </Text>
+          {template.isCloudTemplate && (
+            <Badge appearance='tint' color='brand' size='small' icon={<Cloud16Regular />}>
+              {strings.CloudTemplateBadgeText}
+            </Badge>
+          )}
+        </div>
+        {template.subText && (
+          <Text size={200} id={descriptionId} className={styles.optionDescription}>
+            {template.subText}
+          </Text>
+        )}
+      </div>
+    </div>
+  )
+}
+
+/**
+ * The template-selection section in the project setup dialog: a few templates as cards, all
+ * visible at once, more than that in a dropdown.
+ */
 export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
   const {
-    mode,
-    hasExistingTemplate,
-    matchingTemplates,
-    query,
+    choices,
     selectedTemplate,
-    isSingleTemplate,
-    validationMessage,
-    showPlannerWarning,
+    selectedValue,
+    showAsCards,
     isCloudTemplate,
     isResolvingCloudTemplate,
     cloudTemplateError,
     cloudIncompatibleMessage,
-    onModeChanged,
-    onTemplateSelect,
-    onClearTemplate,
-    setQuery
+    onTemplateChange
   } = useTemplateSelector()
+  const id = useId('template-selector')
+  const headingId = `${id}-heading`
 
   return (
     <div className={styles.root}>
-      {hasExistingTemplate && (
+      <h3 id={headingId} className={styles.heading}>
+        {strings.ProjectTemplateSelectorTitle}
+      </h3>
+      {showAsCards ? (
         <RadioGroup
-          value={mode}
-          onChange={onModeChanged}
-          layout='horizontal'
-          aria-label={strings.ProjectTemplateSelectorModeLabel}
+          className={styles.cards}
+          value={selectedValue}
+          onChange={(_, data) => onTemplateChange(data.value)}
+          aria-labelledby={headingId}
         >
-          <Radio value='notemplate' label={strings.ProjectTemplateSelectorNoTemplateRadioLabel} />
-          <Radio
-            value='selecttemplate'
-            label={strings.ProjectTemplateSelectorSelectTemplateRadioLabel}
-          />
+          {choices.map((template) => {
+            const titleId = `${id}-title-${template.id}`
+            const descriptionId = template.subText ? `${id}-description-${template.id}` : undefined
+            return (
+              <Radio
+                key={template.id}
+                className={styles.card}
+                value={String(template.id)}
+                aria-labelledby={titleId}
+                aria-describedby={descriptionId}
+                label={{
+                  className: styles.cardLabel,
+                  children: renderTemplate(template, titleId, descriptionId)
+                }}
+              />
+            )
+          })}
         </RadioGroup>
-      )}
-      {mode === 'selecttemplate' && (
-        <FieldContainer
-          iconName='ContentView'
-          label={strings.ProjectTemplateSelectorTitle}
-          description={selectedTemplate?.subText}
-        >
-          <Combobox
-            freeform
-            placeholder={strings.ProjectTemplateSelectorSearchPlaceholder}
-            disabled={isSingleTemplate}
-            expandIcon={getComboboxExpandIconProps()}
-            value={query || (selectedTemplate?.text ?? '')}
-            selectedOptions={selectedTemplate ? [String(selectedTemplate.id)] : []}
-            onOptionSelect={onTemplateSelect}
-            clearable
-            onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-              const value = e.target.value
-              setQuery(value)
-              if (value === '') {
-                onClearTemplate()
-              }
-            }}
+      ) : (
+        <Field hint={selectedTemplate?.subText}>
+          <Dropdown
+            aria-labelledby={headingId}
+            placeholder={strings.ProjectTemplateSelectorPlaceholder}
+            value={selectedTemplate?.text ?? ''}
+            selectedOptions={selectedValue ? [selectedValue] : []}
+            onOptionSelect={(_, data) => onTemplateChange(data.optionValue)}
           >
-            {matchingTemplates.length > 0 ? (
-              matchingTemplates.map((template) => (
-                <Option key={template.id} value={String(template.id)} text={template.text}>
-                  <div className={styles.option}>
-                    {template.iconProps?.iconName && (
-                      <span className={styles.optionIcon}>
-                        {getFluentIconWithFallback(template.iconProps.iconName)}
-                      </span>
-                    )}
-                    <div className={styles.optionContent}>
-                      <div className={styles.optionTitleRow}>
-                        <Text weight='semibold'>{template.text}</Text>
-                        {template.isCloudTemplate && (
-                          <Badge
-                            appearance='tint'
-                            color='brand'
-                            size='small'
-                            icon={<Cloud16Regular />}
-                          >
-                            {strings.CloudTemplateBadgeText}
-                          </Badge>
-                        )}
-                      </div>
-                      {template.subText && (
-                        <Text
-                          size={200}
-                          className={styles.optionDescription}
-                          title={template.subText}
-                        >
-                          {template.subText}
-                        </Text>
-                      )}
-                    </div>
-                  </div>
-                </Option>
-              ))
-            ) : (
-              <Option key='no-matches' value='' text='' disabled>
-                {strings.ProjectTemplateSelectorNoMatchText}
+            {choices.map((template) => (
+              <Option key={template.id} value={String(template.id)} text={template.text}>
+                {renderTemplate(template)}
               </Option>
-            )}
-          </Combobox>
-        </FieldContainer>
-      )}
-      {showPlannerWarning && (
-        <UserMessage text={strings.PlannerMemberWarningMessage} intent='warning' />
+            ))}
+          </Dropdown>
+        </Field>
       )}
       {isCloudTemplate && !cloudTemplateError && (
         <div className={styles.cloudBanner}>
@@ -148,7 +136,6 @@ export const TemplateSelector: ProjectSetupDialogSectionComponent = () => {
         <Spinner size='tiny' label={strings.CloudTemplateResolvingMessage} />
       )}
       {cloudTemplateError && <UserMessage text={cloudTemplateError} intent='error' />}
-      {validationMessage && <UserMessage text={validationMessage} intent='info' />}
     </div>
   )
 }
