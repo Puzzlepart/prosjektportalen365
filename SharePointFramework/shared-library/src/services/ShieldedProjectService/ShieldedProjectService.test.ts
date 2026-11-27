@@ -182,6 +182,14 @@ describe('ShieldedProjectService', () => {
       expect(all.did.hubReads).toEqual([])
     })
 
+    it("makes a template's own content type whose ID ends in two digits, after the one it is built on", async () => {
+      // «Prosjekt (ByggAnlegg)»: taken for built in, it was never made, and no list could get it.
+      const { service, did } = sites()
+      await service.ensureContentType(`${PROJECT}BA`)
+      expect(jsom.created.map(({ id }) => id)).toEqual([PROJECT, `${PROJECT}BA`])
+      expect(did.hubReads).toEqual([PROJECT, `${PROJECT}BA`])
+    })
+
     it("fails, naming both IDs, when SharePoint stores the content type under another ID than the hub's", async () => {
       const { service } = sites()
       jsom.storedId = '0x01002BAACE12293A264BBB6E77E84B50CD20'

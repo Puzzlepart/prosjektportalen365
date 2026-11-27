@@ -19,17 +19,36 @@ describe('getContentTypeLineage', () => {
     expect(getContentTypeLineage(template)).toEqual([PROJECT, template])
   })
 
-  it('leaves out the built-in content types every site has', () => {
+  it("gives a template's content type whose ID ends in two digits too: it is as custom as one that ends in a GUID", () => {
+    // «Prosjekt (ByggAnlegg)» and «Prosjektstatus (ByggAnlegg)» on a hub.
+    expect(getContentTypeLineage(`${PROJECT}BA`)).toEqual([PROJECT, `${PROJECT}BA`])
+    expect(getContentTypeLineage(`${STATUS}ba`)).toEqual([STATUS, `${STATUS}ba`])
+    const grandchild = `${PROJECT}BA00${GUID}01`
+    expect(getContentTypeLineage(grandchild)).toEqual([
+      PROJECT,
+      `${PROJECT}BA`,
+      `${PROJECT}BA00${GUID}`,
+      grandchild
+    ])
+  })
+
+  it('names the built-in content types on the way as well, which the caller knows the site to have', () => {
     const document = '0x0101'
     const custom = `${document}00A1B2C3D4E5F60718293A4B5C6D7E8F90`
-    expect(getContentTypeLineage(document)).toEqual([])
-    expect(getContentTypeLineage(custom)).toEqual([custom])
+    expect(getContentTypeLineage(document)).toEqual([document])
+    expect(getContentTypeLineage(custom)).toEqual([document, custom])
+    // Item itself is what every lineage is built on.
+    expect(getContentTypeLineage('0x01')).toEqual([])
   })
 
   it('gives nothing for a value that is not a content type ID', () => {
     expect(getContentTypeLineage('')).toEqual([])
     expect(getContentTypeLineage(undefined)).toEqual([])
     expect(getContentTypeLineage('Prosjektstatus')).toEqual([])
+    // An ID cut short, and one that is not built on Item.
+    expect(getContentTypeLineage(`${PROJECT}00A1B2`)).toEqual([])
+    expect(getContentTypeLineage(`${PROJECT}B`)).toEqual([])
+    expect(getContentTypeLineage('0x0000A1B2')).toEqual([])
   })
 })
 
