@@ -881,12 +881,14 @@ export default class ProjectSetup extends BaseApplicationCustomizer<IProjectSetu
     }
     if (!isSiteAdmin) return ProjectSetupValidation.NotSiteAdmin
     if (!groupId) return ProjectSetupValidation.NoGroupId
+    // Before the hub's language is read: without a hub id the data service looks the hub up by
+    // search, which can answer with any site, and a new site may not have its hub yet.
+    if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
+    if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     const hubLanguage = await this._getHubLanguage()
     if (hubLanguage !== undefined && hubLanguage !== this.context.pageContext.web.language) {
       return ProjectSetupValidation.InvalidWebLanguage
     }
-    if (!hubSiteId) return ProjectSetupValidation.NoHubConnection
-    if (siteId.includes(hubSiteId)) return ProjectSetupValidation.IsHubSite
     if (this._isSetup) return ProjectSetupValidation.AlreadySetup
     return ProjectSetupValidation.Ready
   }

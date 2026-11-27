@@ -20,6 +20,8 @@ const hub = {
   language: 1044,
   /** What the hub fails a read of its language with, when it is to fail */
   languageError: undefined as Error,
+  /** How many times the language of the hub has been read */
+  languageReads: 0,
   updates: [] as any[],
   /** Whether the user can add to the hub's project list; `undefined` makes the check fail. */
   canWrite: true as boolean | undefined,
@@ -36,10 +38,12 @@ jest.mock('pp365-shared-library/lib/telemetry', () => ({
 class FakePortalDataService {
   public isAvailable = true
   public web = {
-    select: () => () =>
-      hub.languageError
+    select: () => () => {
+      hub.languageReads++
+      return hub.languageError
         ? Promise.reject(hub.languageError)
         : Promise.resolve({ Language: hub.language })
+    }
   }
   public configure() {
     return Promise.resolve(Object.assign(this, hub.portal))
@@ -416,6 +420,7 @@ beforeEach(() => {
   hub.fetchError = new Error('Listen finnes ikke')
   hub.language = 1044
   hub.languageError = undefined
+  hub.languageReads = 0
   hub.updates = []
   hub.canWrite = true
   hub.portal = {}
@@ -658,6 +663,16 @@ describe('ProjectSetup', () => {
       expect(dialogs.setup.validation).toBe(ProjectSetupValidation.Ready)
     }
   )
+
+  it('reads no language for a site that is not connected to a hub, whatever site the data service finds in its place', async () => {
+    // Without a hub id the data service looks the hub up by search, which can answer with any
+    // site: here one in another language.
+    hub.language = 1033
+    await projectSetup({ legacy: { hubSiteId: '' } })
+    expect(dialogs.error.error.message).toBe(strings.NoHubSiteErrorMessage)
+    expect(hub.languageReads).toBe(0)
+    expect(removal.deleteCustomizer).not.toHaveBeenCalled()
+  })
 
   it('warns, rather than fails, about a missing hub', async () => {
     await projectSetup({ legacy: { hubSiteId: '' } })
